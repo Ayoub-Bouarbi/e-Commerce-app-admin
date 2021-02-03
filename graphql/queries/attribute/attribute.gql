@@ -1,0 +1,11 @@
+query($id: ID!){
+  attribute(id: $id){
+    id
+    name
+    frontend_type
+    AttributeValues{
+      id
+      value
+    }
+  }
+}

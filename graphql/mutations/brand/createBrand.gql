@@ -1,0 +1,5 @@
+mutation($input: BrandInput!){
+  createBrand(input: $input){
+    id
+  }
+}

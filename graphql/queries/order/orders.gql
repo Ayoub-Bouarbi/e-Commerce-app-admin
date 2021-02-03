@@ -1,0 +1,16 @@
+query
+{
+  orders{
+    id
+    order_number
+    first_name
+    last_name
+    created_at
+    User{
+      id
+      first_name
+      last_name
+      email
+    }
+  }
+}

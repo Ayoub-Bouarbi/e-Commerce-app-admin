@@ -1,0 +1,14 @@
+.v-select{
+  --border-opacity: 1;
+  border: 1px solid rgba(113, 128, 150, var(--border-opacity));
+  --bg-opacity: 1;
+  background: rgba(237, 242, 247, var(--bg-opacity));
+}
+
+.v-select.-multiple .v-select-selected {
+  background: #3d68ff;
+  border-color: rgba(0,0,0,.1);
+  color: #FFF;
+  border-radius: 5px;
+}
+

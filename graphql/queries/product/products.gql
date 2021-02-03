@@ -1,0 +1,19 @@
+query{
+  products{
+    id
+    sku
+    name
+    status
+    Categories{
+      id
+      name
+      slug
+    }
+    Brand{
+      id
+      name
+      slug
+      logo
+    }
+  }
+}

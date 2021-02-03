@@ -1,0 +1,5 @@
+mutation($input: UserInput!,$password: String!,$password_confirmation: String!){
+  createUser(input: $input,password: $password,password_confirmation: $password_confirmation){
+    id
+  }
+}

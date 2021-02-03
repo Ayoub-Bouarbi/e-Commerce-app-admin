@@ -1,0 +1,8 @@
+query($id: ID!){
+  brand(id: $id){
+    id
+    name
+    slug
+    logo
+  }
+}

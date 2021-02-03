@@ -1,0 +1,35 @@
+query($id: ID!){
+  product(id: $id){
+    id
+    sku
+    name
+    price
+    sale_price
+    quantity
+    weight
+    featured
+    status
+    description
+    ProductAttributes{
+      id
+      value
+      price
+      quantity
+    }
+    Images{
+      id
+      image
+    }
+    Categories{
+      id
+      name
+      slug
+    }
+    Brand{
+      id
+      name
+      slug
+      logo
+    }
+  }
+}

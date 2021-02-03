@@ -1,0 +1,5 @@
+mutation($input: AttributeInput!){
+  createAttribute(input: $input){
+    id
+  }
+}

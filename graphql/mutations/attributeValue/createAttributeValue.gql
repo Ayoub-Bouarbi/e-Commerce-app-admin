@@ -1,0 +1,6 @@
+mutation($input: AttributeValueInput){
+  attributeValue: createAttributeValue(input: $input){
+    id
+    value
+  }
+}

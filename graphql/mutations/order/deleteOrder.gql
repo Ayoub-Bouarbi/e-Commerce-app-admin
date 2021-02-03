@@ -1,0 +1,5 @@
+mutation($id: ID!){
+  deleteOrder(id: $id){
+    id
+  }
+}

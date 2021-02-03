@@ -1,0 +1,11 @@
+query{
+  attributes{
+    id
+    name
+    frontend_type
+    AttributeValues{
+      id
+      value
+    }
+  }
+}
