@@ -1,5 +1,5 @@
 mutation($id: ID!){
   deleteProductImage(id: $id){
-    id
+    status
   }
 }

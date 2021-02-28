@@ -1,8 +1,0 @@
-mutation($input: ProductAttributeInput!){
-  product_attribute: createProductAttribute(input: $input){
-    id
-    value
-    price
-    quantity
-  }
-}

@@ -1,60 +1,55 @@
 <template>
-  <div class="w-full overflow-x-hidden border-t flex flex-col">
-    <main class="w-full flex-grow p-6">
-      <div class="flex items-center justify-center">
-        <h1 class="text-3xl flex-1 text-black">Orders</h1>
-      </div>
-      <div class="w-full mt-12">
-        <p class="text-xl pb-3 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-10 pr-2 pt-1" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          Latest Reports
-        </p>
-        <div class="bg-white overflow-auto">
-          <table class="min-w-full bg-white">
-            <thead class="bg-gray-800 text-white">
-              <tr>
-                <th class="w-2/5 text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                <th class="w-1/5 text-left py-3 px-4 uppercase font-semibold text-sm">Placed By</th>
-                <th class="w-1/5 text-left py-3 px-4 uppercase font-semibold text-sm">Date</th>
-                <th class="w-1/5 text-left py-3 px-4 uppercase font-semibold text-sm">To</th>
-                <th class="text-center py-3 px-10 uppercase font-semibold text-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </th>
-              </tr>
-            </thead>
-            <tbody v-if="$apollo.queries.orders.loading" class="text-gray-700">
-              Loading...
-            </tbody>
-            <tbody v-else class="text-gray-700">
-              <tr v-for="order of orders" :key="order.id"
-                class="hover:bg-gray-200 transition duration-500 ease-in-out">
-                <td class="w-2/5 text-left py-3 px-4"> {{ order.order_number }} </td>
-                <td class="w-1/5 text-left py-3 px-4"> {{ order.User.first_name + ' ' + order.User.last_name }} </td>
-                <td class="w-1/5 text-left py-3 px-4"> {{ order.created_at }} </td>
-                <td class="w-1/5 text-left py-3 px-4"> {{ order.first_name + ' ' + order.last_name }} </td>
-                <td class="w-1/5 text-center py-3 px-4">
-                  <button class="px-1" @click="deleteOrder(order)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6" fill="none" viewBox="0 0 24 24" stroke="red">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
+
+  <el-main class="bg-gray-200">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
+      <el-breadcrumb-item>Orders</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card class="mt-5" shadow="never">
+      <el-table border empty-text="There is no data to display" size="small" max-height="480"
+        :data="ordersList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <p>State: {{ props.row.state }}</p>
+            <p>City: {{ props.row.city }}</p>
+            <p>Address: {{ props.row.address }}</p>
+            <p>Zip: {{ props.row.zip_code }}</p>
+            <p>Country: {{ props.row.country }}</p>
+            <p>Phone Number: {{ props.row.phone_number }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column label="ID" prop="order_number">
+        </el-table-column>
+        <el-table-column label="Placed By" prop="user">
+          <template slot-scope="{row}">
+            <span>{{ row.User.first_name + ' ' + row.User.last_name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Date" prop="created_at">
+          <template slot-scope="{row}">
+            <el-tag size="small" type="success" disable-transitions>{{ row.created_at | shortDate }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="To" prop="first_name">
+          <template slot-scope="{row}">
+            <span class="capitalize">{{ row.first_name + ' ' + row.last_name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template slot="header">
+            <el-input v-model="search" size="small" placeholder="Type to search" />
+          </template>
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="remove(scope.$index, scope.row)">Delete</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="ordersLength"
+        @current-change="setPage">
+      </el-pagination>
+    </el-card>
+  </el-main>
 </template>
 
 <script>
@@ -64,7 +59,10 @@
   export default {
     data() {
       return {
-        orders: []
+        orders: [],
+        search: '',
+        page: 1,
+        pageSize: 10
       }
     },
     apollo: {
@@ -73,8 +71,24 @@
         query: GET_ORDERS,
       }
     },
+    filters: {
+      shortDate(date) {
+        return (new Date(date)).toDateString();
+      }
+    },
+    computed: {
+      ordersList() {
+        return this.orders.slice(this.pageSize * this.page - this.pageSize, this.pageSize * this.page)
+      },
+      ordersLength() {
+        return this.orders.length;
+      }
+    },
     methods: {
-      deleteOreder(order) {
+      setPage(val) {
+        this.page = val;
+      },
+      deleteOreder(index, order) {
         this.$swal({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -90,14 +104,11 @@
                 variables: {
                   id: order.id
                 }
-              }).then(({
-                data
-              }) => {
-                let index = this.orders.findIndex(ord => ord.id == order.id);
+              }).then(() => {
                 this.orders.splice(index, 1);
                 this.$swal('Deleted!', 'Your file has been deleted.', 'success');
               })
-              .catch(res => {
+              .catch(() => {
                 this.$toast.error('Error while deleting');
               });
           }

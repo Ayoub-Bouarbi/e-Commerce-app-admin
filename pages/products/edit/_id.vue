@@ -1,129 +1,111 @@
 <template>
-  <div class="w-full overflow-x-hidden border-t flex flex-col">
-    <main class="w-full flex-grow p-6">
-      <div class="flex items-center justify-center">
-        <h1 class="text-3xl flex-1 text-black">Product Information</h1>
-      </div>
-      <div class="w-full mt-12">
-        <ul class="flex border-b">
-          <li class="-mb-px mr-1" @click="openTab = 1">
-            <a :class="openTab === 1 ? 'border-l border-t border-r rounded-t text-blue-700 font-semibold' : 'text-blue-500 hover:text-blue-800'"
-              class="bg-white inline-block py-2 px-4 font-semibold" href="#">General</a>
-          </li>
-          <li class="mr-1" @click="openTab = 2">
-            <a :class="openTab === 2 ? 'border-l border-t border-r rounded-t text-blue-700 font-semibold' : 'text-blue-500 hover:text-blue-800'"
-              class="bg-white inline-block py-2 px-4 font-semibold" href="#">Product Images</a>
-          </li>
-          <li class="mr-1" @click="openTab = 3">
-            <a :class="openTab === 3 ? 'border-l border-t border-r rounded-t text-blue-700 font-semibold' : 'text-blue-500 hover:text-blue-800'"
-              class="bg-white inline-block py-2 px-4 font-semibold" href="#">Product Attributes</a>
-          </li>
-        </ul>
-        <div v-show="openTab === 1" class="w-full pr-0 lg:pr-2 bg-white rounded shadow-xl">
-          <div class="leading-loose lg:w-2/3">
-            <div class="p-10">
-              <div>
-                <label class="block text-sm text-gray-600" for="name">Name</label>
-                <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                  v-model="data.name" id="name" name="name" type="text" required placeholder="Product Name">
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-600" for="name">SKU</label>
-                  <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                    v-model="data.sku" id="sku" name="sku" type="text" required placeholder="Product Sku">
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-600" for="brand_id">Brand</label>
-                  <select name="brand_id" id="brand_id" v-model="data.brand_id"
-                    class="w-full border border-gray-600 px-5 py-2 text-gray-700 bg-gray-200 rounded">
-                    <option v-for="brand in brands" :key="brand.id" :value="brand.id">{{ brand.name }}</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-600" for="category_id">Categories</label>
-                <v-select class="text-black" v-model="data.categories_id" as="name:id:id" :from="categories" tagging
-                  :tag-keys="[9,32,188]"></v-select>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-600" for="price">Price</label>
-                  <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                    v-model="data.price" id="price" name="price" type="number" required placeholder="Product Price">
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-600" for="price">Special Price</label>
-                  <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                    v-model="data.sale_price" id="sale_price" name="sale_price" type="number" step="0.1" required
-                    placeholder="Product Specail Price">
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-600" for="quntity">Quantity</label>
-                  <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                    v-model="data.quantity" id="quantity" name="quantity" type="number" required
-                    placeholder="Product Quntity">
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-600" for="price">Weight</label>
-                  <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"
-                    v-model="data.weight" id="weight" name="weight" type="number" required placeholder="Product Weight">
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-600" for="description">Description</label>
-                <textarea name="description" id="description" v-model="data.description" rows="4"
-                  class="w-full px-5 py-1 text-gray-700 bg-gray-200 border border-gray-600 rounded"></textarea>
-              </div>
-              <div class="form-check">
-                <label class="text-gray-600">
-                  <input class="py-1" type="checkbox" id="status" v-model="data.status" name="status" /> Status
-                </label>
-              </div>
-              <div class="form-check">
-                <label class="text-gray-600">
-                  <input class="py-1" type="checkbox" id="featured" v-model="data.featured" name="featured" /> Featured
-                </label>
-              </div>
-              <div class="mt-6">
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit"
-                  @click="submit">Submit</button>
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-red-500 rounded" type="submit"
-                  @click="cancel">Cancel</button>
-              </div>
-            </div>
+  <el-main class="bg-gray-200">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'products' }">Products</el-breadcrumb-item>
+      <el-breadcrumb-item>Edit</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-tabs class="mt-5" type="border-card" v-model="active_tab">
+      <el-tab-pane label="Product Information" name="first">
+        <el-form ref="form" class="w-1/2" size="meduim" label-position="top" :model="form">
+          <el-form-item label="Product Name">
+            <el-input v-model="form.name" placeholder="please type product name"></el-input>
+          </el-form-item>
+          <el-row :gutter="12">
+            <el-col :span="12">
+              <el-form-item label="SKU">
+                <el-input v-model="form.sku" placeholder="please type product sku"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="Brand">
+                <el-select class="w-full" v-model="form.brand_id" placeholder="please select product brand">
+                  <el-option v-for="brand in brands" :key="brand.id" :label="brand.name" :value="brand.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="Categories">
+            <el-select class="w-full" multiple v-model="form.categories_id"
+              placeholder="please select product categories">
+              <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Weight">
+            <el-input v-model="form.weight" type="number"></el-input>
+          </el-form-item>
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-form-item label="Price">
+                <el-input v-model="form.price" type="number"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="Sale Price">
+                <el-input type="number" v-model="form.sale_price"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="Quantity">
+                <el-input v-model="form.quantity" type="number"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="Description">
+            <el-input v-model="form.description" type="textarea" placeholder="please type product description">
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="form.status">Status</el-checkbox>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="form.featured">Featured</el-checkbox>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="small" @click="onSubmit">Save</el-button>
+            <el-button @click="onCancel" size="small">Cancel</el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane label="Product Images" name="second">
+        <el-upload ref="upload" multiple :file-list="fileList" :limit="6" action="#" list-type="picture-card" :auto-upload="false">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{file}">
+            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
+            <span class="el-upload-list__item-actions">
+              <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                <i class="el-icon-zoom-in"></i>
+              </span>
+            </span>
           </div>
-        </div>
-        <div v-show="openTab === 2" class="w-full pr-0 lg:pr-2 bg-white rounded shadow-xl">
-          <div class="leading-loose lg:w-2/3">
-            <div class="p-4">
-              <vue-uploader :product_images="data.product_images" :product_id="$route.params.id"></vue-uploader>
-            </div>
-          </div>
-        </div>
-        <div v-show="openTab === 3">
-          <product-attributes :product_attributes="data.product_attributes" :product_id="$route.params.id"></product-attributes>
-        </div>
-      </div>
-    </main>
-  </div>
+        </el-upload>
+        <el-button class="mt-5" type="primary" size="small" @click="onUpload">Upload</el-button>
+        <el-button class="mt-5" type="danger" size="small" @click="clearFiles">Clear Files</el-button>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+      </el-tab-pane>
+    </el-tabs>
+  </el-main>
 </template>
 
 <script>
-
   import GET_CATEGORIES from '@/graphql/queries/category/categoriesExcept.gql';
   import GET_BRANDS from '@/graphql/queries/brand/brands.gql';
   import UPDATE_PRODUCT from '@/graphql/mutations/product/updateProduct.gql';
   import GET_PRODUCT from '@/graphql/queries/product/product.gql';
-  import { vSelect } from '@desislavsd/vue-select';
-  import { pluck } from 'ramda';
+  import UPLOAD_PRODUCT_IMAGE from '@/graphql/mutations/product/uploadProductImage.gql';
+  import DELETE_PRODUCT_IMAGE from '@/graphql/mutations/product/deleteProductImage.gql';
+  import {
+    pluck
+  } from 'ramda';
 
   export default {
     data() {
       return {
-        data: {
+        form: {
           name: '',
           sku: '',
           price: 0,
@@ -135,23 +117,21 @@
           description: '',
           status: false,
           featured: false,
-          product_attributes: [],
           product_images: [],
         },
+        active_tab: 'first',
         brands: [],
         categories: [],
-        openTab: 1,
+        dialogImageUrl: '',
+        dialogVisible: false,
       }
-    },
-    components: {
-      vSelect,
     },
     apollo: {
       categories: {
         prefetch: true,
         query: GET_CATEGORIES,
         variables() {
-          return{
+          return {
             id: 1
           }
         }
@@ -168,52 +148,98 @@
             id: this.$route.params.id
           },
         })
-        .then(({ data }) => {
-          this.data.name = data.product.name;
-          this.data.sku = data.product.sku;
-          this.data.price = data.product.price;
-          this.data.sale_price = data.product.sale_price;
-          this.data.status = data.product.status;
-          this.data.weight = data.product.weight;
-          this.data.quantity = data.product.quantity;
-          this.data.featured = data.product.featured;
-          this.data.brand_id = data.product.Brand.id;
-          this.data.description = data.product.description;
-          this.data.categories_id = pluck('id', data.product.Categories);
-          this.data.product_attributes = data.product.ProductAttributes;
-          this.data.product_images = data.product.Images;
+        .then(({
+          data
+        }) => {
+          this.form.name = data.product.name;
+          this.form.sku = data.product.sku;
+          this.form.price = data.product.price;
+          this.form.sale_price = data.product.sale_price;
+          this.form.status = data.product.status;
+          this.form.weight = data.product.weight;
+          this.form.quantity = data.product.quantity;
+          this.form.featured = data.product.featured;
+          this.form.brand_id = data.product.Brand.id;
+          this.form.description = data.product.description;
+          this.form.categories_id = pluck('id', data.product.Categories);
+          this.form.product_images = data.product.Images;
         });
     },
+    computed: {
+      fileList(){
+        let images = [];
+        this.form.product_images.forEach((image) => {
+          images.push({name: image.image,url: "http://app-api.test/storage/uploads/products/" + image.image});
+        })
+
+        return images;
+      }
+    },
     methods: {
-      cancel() {
+      onUpload() {
+        let files = pluck('raw', this.$refs.upload.uploadFiles);
+        this.$apollo.mutate({
+            mutation: UPLOAD_PRODUCT_IMAGE,
+            variables: {
+              input: {
+                images: files,
+                product_id: this.$route.params.id
+              }
+            }
+          })
+          .then(() => {
+            this.$toast.success('Successfully Uploaded');
+          }).catch(() => {
+            this.$toast.error('Error while Uploading');
+          });
+      },
+      clearFiles(){
+          this.$apollo.mutate({
+            mutation: DELETE_PRODUCT_IMAGE,
+            variables: {
+              id: this.$route.params.id
+            }
+          })
+          .then(() => {
+            this.$toast.success('Successfully Deleted');
+            this.$refs.upload.clearFiles();
+          }).catch(() => {
+            this.$toast.error('Error while Deleting');
+          });
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      onCancel() {
         this.$router.push({
           name: 'products'
         });
       },
-      submit() {
+      onSubmit() {
         this.$apollo.mutate({
             mutation: UPDATE_PRODUCT,
             variables: {
               id: this.$route.params.id,
               input: {
-                name: this.data.name,
-                sku: this.data.sku,
-                price: this.data.price,
-                sale_price: this.data.sale_price,
-                brand_id: this.data.brand_id,
-                categories_id: this.data.categories_id,
-                quantity: this.data.quantity,
-                weight: this.data.weight,
-                description: this.data.description,
-                status: this.data.status,
-                featured: this.data.featured
+                name: this.form.name,
+                sku: this.form.sku,
+                price: this.form.price,
+                sale_price: this.form.sale_price,
+                brand_id: this.form.brand_id,
+                categories_id: this.form.categories_id,
+                quantity: this.form.quantity,
+                weight: this.form.weight,
+                description: this.form.description,
+                status: this.form.status,
+                featured: this.form.featured
               }
             }
           })
-          .then((res) => {
-            this.$toast.success('Successfully created');
-          }).catch(res => {
-            this.$toast.error('Error while creating');
+          .then(() => {
+            this.$toast.success('Successfully Updated');
+          }).catch(() => {
+            this.$toast.error('Error while Updating');
           });
       }
     },

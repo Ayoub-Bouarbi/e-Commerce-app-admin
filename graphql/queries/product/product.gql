@@ -10,12 +10,6 @@ query($id: ID!){
     featured
     status
     description
-    ProductAttributes{
-      id
-      value
-      price
-      quantity
-    }
     Images{
       id
       image

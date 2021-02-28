@@ -1,81 +1,75 @@
 <template>
-  <div class="w-full overflow-x-hidden border-t flex flex-col">
-    <main class="w-full flex-grow p-6">
-      <div class="flex items-center justify-center">
-        <h1 class="text-3xl flex-1 text-black">Users Information</h1>
-      </div>
-      <div class="w-full mt-12">
-        <div class="w-full my-6 pr-0 lg:pr-2 bg-white rounded shadow-xl">
-          <div class="leading-loose lg:w-3/5">
-            <div class="p-10 ">
-              <div class="grid grid-cols-2 gap-4">
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="first_name">First Name</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="data.first_name" type="text" required placeholder="First Name">
-                </div>
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="last_name">Last Name</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="data.last_name" type="text" required placeholder="Last Name">
-                </div>
-              </div>
-              <div class="">
-                <label class="block text-sm text-gray-600" for="email">Email</label>
-                <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                  v-model="data.email" type="email" required placeholder="Email">
-              </div>
-              <div class="">
-                <label class="block text-sm text-gray-600" for="address">Address</label>
-                <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                  v-model="data.address" type="text" required placeholder="Address">
-              </div>
-              <div class="">
-                <label class="block text-sm text-gray-600" for="phone_number">Phone Number</label>
-                <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                  v-model="data.phone_number" type="text" required placeholder="Phone Number">
-              </div>
-              <div class="grid grid-cols-3 gap-4">
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="country">Country</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="data.country" type="text" required placeholder="Country">
-                </div>
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="city">City</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="data.city" type="text" required placeholder="City">
-                </div>
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="zipcode">Zip Code</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="data.zip_code" type="text" required placeholder="Zip Code">
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="password">Password</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="password" type="password" required placeholder="Password">
-                </div>
-                <div class="">
-                  <label class="block text-sm text-gray-600" for="password_confirm">Confirm Password</label>
-                  <input class="w-full px-3 py-1 border border-gray-600 text-gray-700 bg-gray-200 rounded"
-                    v-model="password_confirmation" type="password" required placeholder="Confirm Password">
-                </div>
-              </div>
-              <div class="mt-6">
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit"
-                  @click="submit">Submit</button>
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-red-500 rounded" type="submit"
-                  @click="cancel">Cancel</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+  <el-main class="bg-gray-200">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'categories' }">Users</el-breadcrumb-item>
+      <el-breadcrumb-item>Create</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card class="mt-5" shadow="never">
+      <el-form ref="form" class="w-1/2" label-position="left" :model="form">
+        <el-row :gutter="12">
+          <el-col :span="12">
+            <el-form-item label="First Name">
+              <el-input v-model="form.first_name" placeholder="please type first name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Last Name">
+              <el-input v-model="form.last_name" placeholder="please type last name"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="Email">
+          <el-input v-model="form.email" placeholder="please type email"></el-input>
+        </el-form-item>
+        <el-row :gutter="12">
+          <el-col :span="12">
+            <el-form-item label="Address">
+              <el-input v-model="form.address" placeholder="please type address"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Phone Number">
+              <el-input v-model="form.phone_number" placeholder="please type phone number"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="12">
+          <el-col :span="8">
+            <el-form-item label="Country">
+              <el-input v-model="form.country" placeholder="please type country"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="City">
+              <el-input v-model="form.city" placeholder="please type city"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="Zip Code">
+              <el-input v-model="form.zip_code" placeholder="please type zip code"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="12">
+          <el-col :span="12">
+            <el-form-item label="Password">
+              <el-input v-model="password" placeholder="please type password"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Password Confirmation">
+              <el-input v-model="password_confirmation" placeholder="please type password confirmation"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item>
+          <el-button type="primary" size="small" @click="onSubmit">Create</el-button>
+          <el-button @click="onCancel" size="small">Cancel</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </el-main>
 </template>
 
 <script>
@@ -84,7 +78,7 @@
   export default {
     data() {
       return {
-        data: {
+        form: {
           first_name: '',
           last_name: '',
           email: '',
@@ -98,23 +92,23 @@
       }
     },
     methods: {
-      cancel() {
+      onCancel() {
         this.$router.push({
           name: 'users'
         });
       },
-      submit() {
+      onSubmit() {
         this.$apollo.mutate({
             mutation: CREATE_USER,
             variables: {
-              input: this.data,
+              input: this.form,
               password: this.password,
               password_confirmation: this.password_confirmation,
             }
           })
-          .then((res) => {
+          .then(() => {
             this.$toast.success('Successfully created');
-          }).catch(res => {
+          }).catch(() => {
             this.$toast.error('Error while creating');
           });
       }

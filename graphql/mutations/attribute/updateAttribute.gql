@@ -1,5 +1,0 @@
-mutation($id: ID!,$input: AttributeInput!){
-  updateAttribute(id: $id,input: $input){
-    id
-  }
-}

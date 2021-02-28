@@ -6,6 +6,12 @@ query
     first_name
     last_name
     created_at
+    city
+    country
+    state
+    zip_code
+    phone_number
+    address
     User{
       id
       first_name

@@ -1,11 +1,9 @@
 <template>
-  <div class="w-full overflow-x-hidden border-t flex flex-col">
-    <main class="w-full flex-grow p-6">
-      <h1 class="text-3xl text-black pb-6">Dashboard</h1>
-
-
-    </main>
-  </div>
+  <el-main class="bg-gray-200">
+    <el-breadcrumb class="p-5" separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item>Dashboard</el-breadcrumb-item>
+    </el-breadcrumb>
+  </el-main>
 </template>
 
 <script>

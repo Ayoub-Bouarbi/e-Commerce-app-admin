@@ -1,5 +1,0 @@
-mutation($id: ID!){
-  deleteProductAttribute(id: $id){
-    id
-  }
-}

@@ -1,64 +1,87 @@
 <template>
-  <div class="w-full overflow-x-hidden border-t flex flex-col">
-    <main class="w-full flex-grow p-6">
-      <div class="flex items-center justify-center">
-        <h1 class="text-3xl flex-1 text-black">Brand Information</h1>
-
-      </div>
-      <div class="w-full mt-12">
-        <div class="w-full my-6 pr-0 lg:pr-2 bg-white rounded shadow-xl">
-          <div class="leading-loose lg:w-1/2">
-            <div class="p-10 ">
-              <div class="">
-                <label class="block text-sm text-gray-600" for="name">Name</label>
-                <input class="w-full px-3 border border-gray-600 py-1 text-gray-700 bg-gray-200 rounded" v-model="name" id="name" name="name"
-                  type="text" required placeholder="Brand Name" aria-label="Name">
-              </div>
-              <div class="mt-5">
-                <uploader class="text-gray-500" v-model="fileList" :autoUpload="false" :title="'Logo'" :limit="1">
-                </uploader>
-              </div>
-              <div class="mt-6">
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit"
-                  @click="submit">Submit</button>
-                <button class="px-4 py-1 text-white font-light tracking-wider bg-red-500 rounded" type="submit"
-                  @click="cancel">Cancel</button>
-              </div>
+  <el-main class="bg-gray-200">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'brands' }">Brands</el-breadcrumb-item>
+      <el-breadcrumb-item>Create</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card class="mt-5" shadow="never">
+      <el-form ref="form" size="meduim" label-position="top" :model="form">
+        <el-form-item class="w-1/2" label="Brand Name">
+          <el-input v-model="form.name" placeholder="please type brand name"></el-input>
+        </el-form-item>
+        <el-form-item class="w-1/2" label="Brand Image">
+          <el-upload ref="upload" :file-list="fileList" action="#" list-type="picture-card" :auto-upload="false">
+            <i slot="default" class="el-icon-plus"></i>
+            <div slot="file" slot-scope="{file}">
+              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
+              <span class="el-upload-list__item-actions">
+                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+                  <i class="el-icon-delete"></i>
+                </span>
+              </span>
             </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="small" @click="onSubmit">Create</el-button>
+          <el-button @click="onCancel" size="small">Cancel</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </el-main>
 </template>
 
 <script>
   import CREATE_BRAND from '@/graphql//mutations/brand/createBrand.gql';
+  const R = require('ramda');
 
   export default {
     data() {
       return {
-        name: '',
-        fileList: []
+        form: {
+          name: '',
+        },
+        fileList: [],
+        dialogImageUrl: '',
+        dialogVisible: false,
+        disabled: false
       }
     },
     methods: {
-      cancel(){
-        this.$router.push({name: 'brands'});
+      onCancel() {
+        this.$router.push({
+          name: 'brands'
+        });
       },
-      submit() {
+      handleRemove(file) {
+        this.fileList.splice(0,1);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      onSubmit() {
+        let file = R.pluck('raw', this.$refs.upload.uploadFiles);
+
         this.$apollo.mutate({
             mutation: CREATE_BRAND,
             variables: {
               input: {
                 name: this.name,
-                logo: this.fileList[0].blob
+                logo: file
               }
             }
           })
-          .then((res) => {
+          .then(() => {
             this.$toast.success('Successfully created');
-          }).catch(res => {
+          }).catch(() => {
             this.$toast.error('Error while creating');
           });
       }
@@ -67,8 +90,33 @@
 
 </script>
 
+
 <style>
-.vux-uploader{
-  padding: 0 !important;
-}
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
 </style>
