@@ -135,9 +135,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully created');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully created',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while creating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while creating',
+              type: 'error'
+            });
           });
       }
     },

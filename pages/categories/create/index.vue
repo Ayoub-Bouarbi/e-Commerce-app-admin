@@ -12,12 +12,13 @@
         </el-form-item>
         <el-form-item class="w-1/2" label="Category Parent">
           <el-select class="w-full" v-model="form.parent_id" placeholder="please select category parent">
-            <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id"></el-option>
+            <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id">
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="small" @click="onSubmit">Create</el-button>
-          <el-button @click="onCancel"  size="small">Cancel</el-button>
+          <el-button @click="onCancel" size="small">Cancel</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -58,10 +59,18 @@
             }
           })
           .then(({ data }) => {
-            this.$toast.success('Successfully created');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully created',
+              type: 'success'
+            });
             this.categories.push(data.category);
           }).catch(() => {
-            this.$toast.error('Error while creating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while creating',
+              type: 'error'
+            });
           });
       }
     },

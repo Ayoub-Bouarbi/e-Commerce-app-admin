@@ -45,7 +45,7 @@
         users: [],
         search: '',
         page: 1,
-        pageSize: 10
+        pageSize: 9
       }
     },
     apollo: {
@@ -67,16 +67,12 @@
         this.page = val;
       },
       remove(index,user) {
-        this.$swal({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
+           this.$confirm('This will permanently delete the recored. Continue?', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          })
+          .then(() => {
             this.$apollo.mutate({
                 mutation: DELETE_USER,
                 variables: {
@@ -84,13 +80,23 @@
                 }
               }).then(() => {
                 this.users.splice(index, 1);
-                this.$swal('Deleted!', 'Your file has been deleted.', 'success');
+                this.$message({
+                  type: 'success',
+                  message: 'Delete completed'
+                });
               })
               .catch(() => {
-                this.$toast.error('Error while deleting');
+                this.$message({
+                  type: 'error',
+                  message: 'Error while deleting'
+                });
               });
-          }
-        });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: 'Delete canceled'
+            });
+          });
       },
       edit(index,user) {
         this.$router.push({

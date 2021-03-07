@@ -8,7 +8,7 @@
       <nuxt-link class="float-right mb-3" :to="{name: 'brands-create'}">
         <el-button size="small">Add</el-button>
       </nuxt-link>
-      <el-table border empty-text="There is no data to display" size="small" max-height="480"
+      <el-table border empty-text="There is no data to display" size="small"
         :data="brandsList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
         <el-table-column label="Name" prop="name">
         </el-table-column>
@@ -24,8 +24,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="brandsLength"
-        @current-change="setPage">
+      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="brandsLength" @current-change="setPage">
       </el-pagination>
     </el-card>
   </el-main>
@@ -41,7 +40,7 @@
         brands: [],
         search: '',
         page: 1,
-        pageSize: 10
+        pageSize: 9
       }
     },
     apollo: {
@@ -62,33 +61,38 @@
       setPage(val) {
         this.page = val;
       },
-      remove(index,brand) {
-        this.$swal({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.$apollo.mutate({
-                mutation: DELETE_BRAND,
-                variables: {
-                  id: brand.id
-                }
-              }).then(() => {
-                this.brands.splice(index, 1);
-                this.$swal('Deleted!', 'Your file has been deleted.', 'success');
-              })
-              .catch(() => {
-                this.$toast.error('Error while deleting');
+      remove(index, brand) {
+        this.$confirm('This will permanently delete the recored. Continue?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          this.$apollo.mutate({
+              mutation: DELETE_BRAND,
+              variables: {
+                id: brand.id
+              }
+            }).then(() => {
+              this.brands.splice(index, 1);
+              this.$message({
+                type: 'success',
+                message: 'Delete completed'
               });
-          }
+            })
+            .catch(() => {
+              this.$message({
+                type: 'error',
+                message: 'Error while deleting'
+              });
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          });
         });
       },
-      edit(index,brand) {
+      edit(index, brand) {
         this.$router.push({
           name: "brands-edit-id",
           params: {

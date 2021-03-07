@@ -38,7 +38,6 @@
 <script>
   import UPDATE_BRAND from '@/graphql/mutations/brand/updateBrand.gql';
   import GET_BRAND from '@/graphql/queries/brand/brand.gql';
-  import DELETE_BRAND_IMAGE from '@/graphql/mutations/brand/deleteBrandImage.gql';
   import {
     pluck
   } from 'ramda';
@@ -67,7 +66,7 @@
           data
         }) => {
           this.form.name = data.brand.name;
-          if(data.brand.logo != null){
+          if (data.brand.logo != null) {
             this.fileList.push({
               name: data.brand.logo,
               url: "http://app-api.test/storage/uploads/brands/" + data.brand.logo
@@ -81,19 +80,6 @@
           name: 'brands'
         });
       },
-      // handleRemove(file) {
-      //   this.$apollo.mutate({
-      //       mutation: DELETE_BRAND_IMAGE,
-      //       variables: {
-      //         id: this.$route.params.id
-      //       }
-      //     }).then(() => {
-      //       this.fileList.splice(0, 1);
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
-      // },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
@@ -112,9 +98,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully updated');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully updated',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while updating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while updating',
+              type: 'error'
+            });
           });
       },
     },

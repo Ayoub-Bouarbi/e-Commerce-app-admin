@@ -70,7 +70,8 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="Product Images" name="second">
-        <el-upload ref="upload" multiple :file-list="fileList" :limit="6" action="#" list-type="picture-card" :auto-upload="false">
+        <el-upload ref="upload" multiple :file-list="fileList" :limit="6" action="#" list-type="picture-card"
+          :auto-upload="false">
           <i slot="default" class="el-icon-plus"></i>
           <div slot="file" slot-scope="{file}">
             <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
@@ -166,10 +167,13 @@
         });
     },
     computed: {
-      fileList(){
+      fileList() {
         let images = [];
         this.form.product_images.forEach((image) => {
-          images.push({name: image.image,url: "http://app-api.test/storage/uploads/products/" + image.image});
+          images.push({
+            name: image.image,
+            url: "http://app-api.test/storage/uploads/products/" + image.image
+          });
         })
 
         return images;
@@ -188,23 +192,39 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully Uploaded');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully Uploaded',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while Uploading');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while Uploading',
+              type: 'error'
+            });
           });
       },
-      clearFiles(){
-          this.$apollo.mutate({
+      clearFiles() {
+        this.$apollo.mutate({
             mutation: DELETE_PRODUCT_IMAGE,
             variables: {
               id: this.$route.params.id
             }
           })
           .then(() => {
-            this.$toast.success('Successfully Deleted');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully Deleted',
+              type: 'success'
+            });
             this.$refs.upload.clearFiles();
           }).catch(() => {
-            this.$toast.error('Error while Deleting');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while Deleting',
+              type: 'error'
+            });
           });
       },
       handlePictureCardPreview(file) {
@@ -237,9 +257,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully Updated');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully Updated',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while Updating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while Updating',
+              type: 'error'
+            });
           });
       }
     },

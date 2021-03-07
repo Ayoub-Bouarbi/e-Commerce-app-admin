@@ -45,8 +45,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="ordersLength"
-        @current-change="setPage">
+      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="ordersLength" @current-change="setPage">
       </el-pagination>
     </el-card>
   </el-main>
@@ -62,7 +61,7 @@
         orders: [],
         search: '',
         page: 1,
-        pageSize: 10
+        pageSize: 9
       }
     },
     apollo: {
@@ -88,17 +87,13 @@
       setPage(val) {
         this.page = val;
       },
-      deleteOreder(index, order) {
-        this.$swal({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
+      remove(index, order) {
+        this.$confirm('This will permanently delete the recored. Continue?', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          })
+          .then(() => {
             this.$apollo.mutate({
                 mutation: DELETE_ORDER,
                 variables: {
@@ -106,13 +101,23 @@
                 }
               }).then(() => {
                 this.orders.splice(index, 1);
-                this.$swal('Deleted!', 'Your file has been deleted.', 'success');
+                this.$message({
+                  type: 'success',
+                  message: 'Your file has been deleted.'
+                });
               })
               .catch(() => {
-                this.$toast.error('Error while deleting');
+                this.$message({
+                  type: 'error',
+                  message: 'Error while deleting'
+                });
               });
-          }
-        });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: 'Delete canceled'
+            });
+          });
       },
     },
   }

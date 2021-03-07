@@ -16,7 +16,8 @@
         </el-table-column>
         <el-table-column label="Categories" prop="categories">
           <template slot-scope="scope">
-            <el-tag size="mini" class="mx-1" v-for="category in scope.row.Categories" :key="category.id" type="primary" disable-transitions>{{ category.name }}</el-tag>
+            <el-tag size="mini" class="mx-1" v-for="category in scope.row.Categories" :key="category.id" type="primary"
+              disable-transitions>{{ category.name }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="Status" prop="Brand">
@@ -35,8 +36,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="productsLength"
-        @current-change="setPage">
+      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="productsLength" @current-change="setPage">
       </el-pagination>
     </el-card>
   </el-main>
@@ -52,7 +52,7 @@
         products: [],
         search: '',
         page: 1,
-        pageSize: 10
+        pageSize: 9
       }
     },
     apollo: {
@@ -73,17 +73,13 @@
       setPage(val) {
         this.page = val;
       },
-      remove(index,product) {
-        this.$swal({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
+      remove(index, product) {
+        this.$confirm('This will permanently delete the recored. Continue?', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          })
+          .then(() => {
             this.$apollo.mutate({
                 mutation: DELETE_PRODUCT,
                 variables: {
@@ -91,15 +87,26 @@
                 }
               }).then(() => {
                 this.products.splice(index, 1);
-                this.$swal('Deleted!', 'Your file has been deleted.', 'success');
+                this.$message({
+                  type: 'success',
+                  message: 'Delete completed'
+                });
               })
               .catch(() => {
-                this.$toast.error('Error while deleting');
+                this.$message({
+                  type: 'error',
+                  message: 'Error while deleting'
+                });
               });
-          }
-        });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: 'Delete canceled'
+            });
+          });
+
       },
-      edit(index,product) {
+      edit(index, product) {
         this.$router.push({
           name: "products-edit-id",
           params: {

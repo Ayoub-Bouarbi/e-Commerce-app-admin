@@ -78,9 +78,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully updated');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully updated',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while updating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while updating',
+              type: 'error'
+            });
           });
       }
     },

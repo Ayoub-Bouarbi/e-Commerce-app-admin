@@ -61,7 +61,7 @@
         });
       },
       handleRemove(file) {
-        this.fileList.splice(0,1);
+        this.fileList.splice(0, 1);
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
@@ -80,9 +80,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully created');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully created',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while creating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while creating',
+              type: 'error'
+            });
           });
       }
     },

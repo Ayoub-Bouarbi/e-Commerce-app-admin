@@ -2,7 +2,7 @@
   <el-main class="bg-gray-200">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'categories' }">Users</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'users' }">Users</el-breadcrumb-item>
       <el-breadcrumb-item>Create</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="mt-5" shadow="never">
@@ -107,9 +107,17 @@
             }
           })
           .then(() => {
-            this.$toast.success('Successfully created');
+            this.$notify({
+              title: 'Success',
+              message: 'Successfully created',
+              type: 'success'
+            });
           }).catch(() => {
-            this.$toast.error('Error while creating');
+            this.$notify({
+              title: 'Error',
+              message: 'Error while creating',
+              type: 'error'
+            });
           });
       }
     },
